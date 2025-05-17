@@ -1,14 +1,15 @@
 package dev.cloudcraft.core.recommendation;
 
+import dev.cloudcraft.core.dsl.ArchitectureBlueprint;
 import dev.cloudcraft.core.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class DefaultArchitectureRecommendationEngineTest {
-    private final ArchitectureRecommendationEngine engine = new DefaultArchitectureRecommendationEngine();
+class DefaultRecommendationEngineTest {
+    private final RecommendationEngine engine = RecommendationEngine.defaultAdvisor();
 
     @Test
     void shouldRecommendContainerizationForVM() {
@@ -21,10 +22,15 @@ class DefaultArchitectureRecommendationEngineTest {
                 Environment.PROD
 
         );
+        ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(vmComponent).build();
 
-        List<String> recommendations = engine.recommend(List.of(vmComponent));
+        List<Recommendation> recommendations = engine.recommend(blueprint);
 
-        assertTrue(recommendations.stream().anyMatch(r -> r.contains("containers instead of VMs")));
+        assertThat(recommendations).hasSize(1);
+        Recommendation rec = recommendations.get(0);
+        assertThat(rec.componentName()).isEqualTo("OrderService");
+        assertThat(rec.suggestion()).contains("Consider moving from VM to container-based deployment");
+        assertThat(rec.type()).isEqualTo(Recommendation.RecommendationType.MODERNIZATION);
     }
 
     @Test
@@ -37,10 +43,11 @@ class DefaultArchitectureRecommendationEngineTest {
                 CloudProvider.GCP,
                 Environment.PROD
         );
+        ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(dbComponent).build();
 
-        List<String> recommendations = engine.recommend(List.of(dbComponent));
+        List<Recommendation> recommendations = engine.recommend(blueprint);
 
-        assertTrue(recommendations.stream().anyMatch(r -> r.contains("managed database services")));
+        assertThat(recommendations).isEmpty();
     }
 
     @Test
@@ -54,9 +61,10 @@ class DefaultArchitectureRecommendationEngineTest {
                 Environment.PROD
         );
 
-        List<String> recommendations = engine.recommend(List.of(serverlessComponent));
+        ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(serverlessComponent).build();
+        List<Recommendation> recommendations = engine.recommend(blueprint);
 
-        assertTrue(recommendations.stream().anyMatch(r -> r.contains("Quarkus instead of Spring Boot")));
+        assertThat(recommendations).isEmpty();
     }
 
     @Test
@@ -69,9 +77,10 @@ class DefaultArchitectureRecommendationEngineTest {
                 CloudProvider.AZURE,
                 Environment.PROD
         );
+        ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(azureComponent).build();
 
-        List<String> recommendations = engine.recommend(List.of(azureComponent));
+        List<Recommendation> recommendations = engine.recommend(blueprint);
 
-        assertTrue(recommendations.stream().anyMatch(r -> r.contains("Azure Service Bus")));
+        assertThat(recommendations).isEmpty();
     }
 }

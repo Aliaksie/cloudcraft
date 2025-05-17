@@ -1,15 +1,7 @@
-package dev.cloudcraft.core.validation;
+package dev.cloudcraft.core.validation.rule;
 
 
-import dev.cloudcraft.core.model.CloudProvider;
-import dev.cloudcraft.core.model.Component;
-import dev.cloudcraft.core.model.Database;
-import dev.cloudcraft.core.model.DeploymentType;
-import dev.cloudcraft.core.model.Environment;
-import dev.cloudcraft.core.model.Framework;
-import dev.cloudcraft.core.model.MessageBroker;
-import dev.cloudcraft.core.model.ProgrammingLanguage;
-import dev.cloudcraft.core.model.TechnologyStack;
+import dev.cloudcraft.core.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -30,7 +22,7 @@ class CloudDatabaseCompatibilityRuleTest {
         );
 
         CloudDatabaseCompatibilityRule rule = new CloudDatabaseCompatibilityRule();
-        List<String> issues = rule.validate(component);
+        List<ValidationResult> issues = rule.validate(component);
 
         assertTrue(issues.isEmpty());
     }
@@ -47,9 +39,9 @@ class CloudDatabaseCompatibilityRuleTest {
         );
 
         CloudDatabaseCompatibilityRule rule = new CloudDatabaseCompatibilityRule();
-        List<String> issues = rule.validate(component);
+        List<ValidationResult> issues = rule.validate(component);
 
         assertEquals(1, issues.size());
-        assertTrue(issues.get(0).contains("not supported on cloud provider"));
+        assertTrue(issues.get(0).message().contains("not supported on cloud provider"));
     }
 }

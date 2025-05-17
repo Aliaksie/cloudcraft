@@ -1,21 +1,15 @@
 package dev.cloudcraft.core.validation;
 
-import dev.cloudcraft.core.model.CloudProvider;
-import dev.cloudcraft.core.model.Component;
-import dev.cloudcraft.core.model.Database;
-import dev.cloudcraft.core.model.DeploymentType;
-import dev.cloudcraft.core.model.Environment;
-import dev.cloudcraft.core.model.Framework;
-import dev.cloudcraft.core.model.MessageBroker;
-import dev.cloudcraft.core.model.ProgrammingLanguage;
-import dev.cloudcraft.core.model.TechnologyStack;
+import dev.cloudcraft.core.dsl.ArchitectureBlueprint;
+import dev.cloudcraft.core.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CompositeComponentValidatorTest {
+class DefaultArchitectureValidatorTest {
+
     @Test
     void defaultValidator_withValidComponent_shouldReturnNoIssues() {
         Component validComponent = new Component(
@@ -26,9 +20,11 @@ class CompositeComponentValidatorTest {
                 CloudProvider.AWS,
                 Environment.PROD
         );
+        ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(validComponent).build();
 
-        CompositeComponentValidator validator = CompositeComponentValidator.defaultValidator();
-        List<String> issues = validator.validate(validComponent);
+
+        DefaultArchitectureValidator validator = ArchitectureValidator.defaultValidator();
+        List<ValidationResult> issues = validator.validate(blueprint);
 
         assertTrue(issues.isEmpty());
     }
@@ -43,11 +39,12 @@ class CompositeComponentValidatorTest {
                 CloudProvider.AZURE,
                 Environment.DEV
         );
+        ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(invalidComponent).build();
 
-        CompositeComponentValidator validator = CompositeComponentValidator.defaultValidator();
-        List<String> issues = validator.validate(invalidComponent);
+        DefaultArchitectureValidator validator = ArchitectureValidator.defaultValidator();
+        List<ValidationResult> issues = validator.validate(blueprint);
 
         assertFalse(issues.isEmpty());
-        assertTrue(issues.get(0).contains("not compatible"));
+        assertTrue(issues.get(0).message().contains("not compatible"));
     }
 }

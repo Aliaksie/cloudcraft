@@ -1,9 +1,6 @@
-package dev.cloudcraft.core.validation;
+package dev.cloudcraft.core.validation.rule;
 
-import dev.cloudcraft.core.model.Component;
-import dev.cloudcraft.core.model.Framework;
-import dev.cloudcraft.core.model.ProgrammingLanguage;
-import dev.cloudcraft.core.model.TechnologyStack;
+import dev.cloudcraft.core.model.*;
 
 import java.util.List;
 import java.util.Set;
@@ -18,12 +15,16 @@ public class FrameworkCompatibilityRule implements ComponentValidationRule {
 //    );
 
     @Override
-    public List<String> validate(final Component component) {
+    public List<ValidationResult> validate(final Component component) {
         final TechnologyStack stack = component.technologyStack();
 
         // Language vs Framework
         if (!isFrameworkCompatible(stack.language(), stack.framework())) {
-            return List.of("Framework " + stack.framework() + " is not compatible with language " + stack.language());
+            return List.of(new ValidationResult(name(),
+                    component.name(),
+                    "Framework " + stack.framework() + " is not compatible with language " + stack.language(),
+                    ValidationResult.Severity.WARNING
+            ));
         }
 
         return List.of();

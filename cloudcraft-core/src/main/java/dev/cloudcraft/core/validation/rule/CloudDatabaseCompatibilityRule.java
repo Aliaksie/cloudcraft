@@ -1,4 +1,4 @@
-package dev.cloudcraft.core.validation;
+package dev.cloudcraft.core.validation.rule;
 
 import dev.cloudcraft.core.model.*;
 
@@ -14,12 +14,16 @@ public class CloudDatabaseCompatibilityRule implements ComponentValidationRule {
 //    );
 
     @Override
-    public List<String> validate(Component component) {
+    public List<ValidationResult> validate(final Component component) {
         final CloudProvider cloud = component.cloudProvider();
         final TechnologyStack stack = component.technologyStack();
 
         if (!isDatabaseCompatible(cloud, stack.database())) {
-            return List.of("Database " + stack.database() + " is not supported on cloud provider " + cloud);
+            return List.of(new ValidationResult(name(),
+                    component.name(),
+                    "Database " + stack.database() + " is not supported on cloud provider " + cloud,
+                    ValidationResult.Severity.WARNING
+            ));
         }
 
         return List.of();
@@ -28,8 +32,10 @@ public class CloudDatabaseCompatibilityRule implements ComponentValidationRule {
 
     private static boolean isDatabaseCompatible(final CloudProvider cloud, final Database database) {
         return switch (cloud) {
-            case AWS -> Set.of(Database.POSTGRESQL, Database.MYSQL, Database.MONGODB).contains(database);
-            case AZURE -> Set.of(Database.POSTGRESQL, Database.MYSQL, Database.SQLSERVER).contains(database);
+            case AWS ->
+                    Set.of(Database.POSTGRESQL, Database.MYSQL, Database.MONGODB, Database.DYNAMODB).contains(database);
+            case AZURE ->
+                    Set.of(Database.POSTGRESQL, Database.MYSQL, Database.SQLSERVER, Database.COSMOSDB).contains(database);
             case GCP -> Set.of(Database.POSTGRESQL, Database.MYSQL).contains(database);
             default -> false;
         };

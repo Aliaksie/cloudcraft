@@ -1,11 +1,12 @@
-package dev.cloudcraft.core.validation;
+package dev.cloudcraft.core.validation.rule;
 
 import dev.cloudcraft.core.model.Component;
+import dev.cloudcraft.core.model.ValidationResult;
 
 import java.util.List;
 
 public interface ComponentValidationRule {
-    List<String> validate(Component component);
+    List<ValidationResult> validate(Component component);
 
     default String name() {
         return this.getClass().getSimpleName();

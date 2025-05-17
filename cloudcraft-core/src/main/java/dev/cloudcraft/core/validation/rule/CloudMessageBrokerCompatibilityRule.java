@@ -1,8 +1,9 @@
-package dev.cloudcraft.core.validation;
+package dev.cloudcraft.core.validation.rule;
 
 import dev.cloudcraft.core.model.CloudProvider;
 import dev.cloudcraft.core.model.Component;
 import dev.cloudcraft.core.model.MessageBroker;
+import dev.cloudcraft.core.model.ValidationResult;
 
 import java.util.List;
 import java.util.Set;
@@ -16,12 +17,16 @@ public class CloudMessageBrokerCompatibilityRule implements ComponentValidationR
 //    );
 
     @Override
-    public List<String> validate(Component component) {
+    public List<ValidationResult> validate(Component component) {
         final CloudProvider cloud = component.cloudProvider();
         final MessageBroker broker = component.technologyStack().messageBroker();
 
         if (!isMessageBrokerCompatible(cloud, broker)) {
-            return List.of("Message broker " + broker + " is not supported on cloud provider " + cloud);
+            return List.of(new ValidationResult(name(),
+                    component.name(),
+                    "Message broker " + broker + " is not supported on cloud provider " + cloud,
+                    ValidationResult.Severity.WARNING
+            ));
         }
 
         return List.of();
