@@ -1,0 +1,13 @@
+- id: rec-001
+  name: Use Managed Database Service
+  level: COMPONENT
+  description: Suggest using managed database services like RDS or Cloud SQL.
+  condition: component.database in [POSTGRESQL, MYSQL]
+  recommendation: Consider using a managed database for better scalability and availability.
+
+- id: rec-002
+  name: Use Event-Driven Communication
+  level: COMPONENT
+  description: Recommend using Kafka or Pub/Sub for async services.
+  condition: component.messageBroker == null
+  recommendation: Add Kafka or similar message broker to enable event-driven communication.

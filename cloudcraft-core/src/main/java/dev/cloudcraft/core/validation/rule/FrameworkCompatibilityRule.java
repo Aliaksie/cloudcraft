@@ -4,6 +4,7 @@ import dev.cloudcraft.core.model.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class FrameworkCompatibilityRule implements ComponentValidationRule {
     // todo: or hasMap
@@ -15,15 +16,17 @@ public class FrameworkCompatibilityRule implements ComponentValidationRule {
 //    );
 
     @Override
-    public List<ValidationResult> validate(final Component component) {
+    public List<EvaluationResult.ValidationResult> validate(final Component component) {
         final TechnologyStack stack = component.technologyStack();
 
         // Language vs Framework
         if (!isFrameworkCompatible(stack.language(), stack.framework())) {
-            return List.of(new ValidationResult(name(),
+            return List.of(new EvaluationResult.ValidationResult(
+                    UUID.randomUUID().toString(),
+                    name(),
                     component.name(),
                     "Framework " + stack.framework() + " is not compatible with language " + stack.language(),
-                    ValidationResult.Severity.WARNING
+                    RuleDefinition.Severity.MEDIUM
             ));
         }
 

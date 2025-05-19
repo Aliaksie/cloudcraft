@@ -20,7 +20,7 @@ class CloudMessageBrokerCompatibilityRuleTest {
         );
 
         CloudMessageBrokerCompatibilityRule rule = new CloudMessageBrokerCompatibilityRule();
-        List<ValidationResult> issues = rule.validate(component);
+        List<EvaluationResult.ValidationResult> issues = rule.validate(component);
 
         assertTrue(issues.isEmpty());
     }
@@ -37,7 +37,7 @@ class CloudMessageBrokerCompatibilityRuleTest {
         );
 
         CloudMessageBrokerCompatibilityRule rule = new CloudMessageBrokerCompatibilityRule();
-        List<ValidationResult> issues = rule.validate(component);
+        List<EvaluationResult.ValidationResult> issues = rule.validate(component);
 
         assertEquals(1, issues.size());
         assertTrue(issues.get(0).message().contains("not supported on cloud provider"));

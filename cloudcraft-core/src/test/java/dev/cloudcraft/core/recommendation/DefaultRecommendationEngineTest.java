@@ -24,13 +24,13 @@ class DefaultRecommendationEngineTest {
         );
         ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(vmComponent).build();
 
-        List<Recommendation> recommendations = engine.recommend(blueprint);
+        List<EvaluationResult.Recommendation> recommendations = engine.recommend(blueprint);
 
         assertThat(recommendations).hasSize(1);
-        Recommendation rec = recommendations.get(0);
+        EvaluationResult.Recommendation rec = recommendations.get(0);
         assertThat(rec.componentName()).isEqualTo("OrderService");
-        assertThat(rec.suggestion()).contains("Consider moving from VM to container-based deployment");
-        assertThat(rec.type()).isEqualTo(Recommendation.RecommendationType.MODERNIZATION);
+        assertThat(rec.message()).contains("Consider moving from VM to container-based deployment");
+        assertThat(rec.type()).isEqualTo(EvaluationResult.Recommendation.RecommendationType.MODERNIZATION);
     }
 
     @Test
@@ -45,7 +45,7 @@ class DefaultRecommendationEngineTest {
         );
         ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(dbComponent).build();
 
-        List<Recommendation> recommendations = engine.recommend(blueprint);
+        List<EvaluationResult.Recommendation> recommendations = engine.recommend(blueprint);
 
         assertThat(recommendations).isEmpty();
     }
@@ -62,7 +62,7 @@ class DefaultRecommendationEngineTest {
         );
 
         ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(serverlessComponent).build();
-        List<Recommendation> recommendations = engine.recommend(blueprint);
+        List<EvaluationResult.Recommendation> recommendations = engine.recommend(blueprint);
 
         assertThat(recommendations).isEmpty();
     }
@@ -79,7 +79,7 @@ class DefaultRecommendationEngineTest {
         );
         ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(azureComponent).build();
 
-        List<Recommendation> recommendations = engine.recommend(blueprint);
+        List<EvaluationResult.Recommendation> recommendations = engine.recommend(blueprint);
 
         assertThat(recommendations).isEmpty();
     }

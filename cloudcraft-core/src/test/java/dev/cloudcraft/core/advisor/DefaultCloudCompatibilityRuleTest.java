@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static dev.cloudcraft.core.model.ValidationResult.Severity.WARNING;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DefaultCloudCompatibilityRuleTest {
@@ -24,11 +23,11 @@ class DefaultCloudCompatibilityRuleTest {
                 .build();
 
         DefaultCloudCompatibilityAdvisor advisor = CloudCompatibilityAdvisor.defaultAdvisor();
-        List<ValidationResult> results = advisor.analyze(blueprint);
+        List<EvaluationResult.ValidationResult> results = advisor.analyze(blueprint);
 
         assertThat(results).hasSize(1);
-        ValidationResult result = results.get(0);
-        assertThat(result.severity()).isEqualTo(WARNING);
+        EvaluationResult.ValidationResult result = results.get(0);
+        assertThat(result.severity()).isEqualTo(RuleDefinition.Severity.MEDIUM);
         assertThat(result.message()).contains("SQLSERVER");
         assertThat(result.componentName()).isEqualTo("LegacyService");
     }
@@ -46,7 +45,7 @@ class DefaultCloudCompatibilityRuleTest {
                 .build();
 
         DefaultCloudCompatibilityAdvisor advisor = CloudCompatibilityAdvisor.defaultAdvisor();
-        List<ValidationResult> results = advisor.analyze(blueprint);
+        List<EvaluationResult.ValidationResult> results = advisor.analyze(blueprint);
 
         assertThat(results).isEmpty();
     }

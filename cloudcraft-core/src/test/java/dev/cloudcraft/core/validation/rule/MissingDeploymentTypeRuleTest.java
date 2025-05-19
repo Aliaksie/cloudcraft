@@ -2,13 +2,7 @@ package dev.cloudcraft.core.validation.rule;
 
 import dev.cloudcraft.core.dsl.ArchitectureBlueprint;
 import dev.cloudcraft.core.dsl.ComponentBuilder;
-import dev.cloudcraft.core.model.CloudProvider;
-import dev.cloudcraft.core.model.Database;
-import dev.cloudcraft.core.model.DeploymentType;
-import dev.cloudcraft.core.model.Framework;
-import dev.cloudcraft.core.model.MessageBroker;
-import dev.cloudcraft.core.model.ProgrammingLanguage;
-import dev.cloudcraft.core.model.ValidationResult;
+import dev.cloudcraft.core.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -29,7 +23,7 @@ class MissingDeploymentTypeRuleTest {
                 .build();
 
         MissingDeploymentTypeRule rule = new MissingDeploymentTypeRule();
-        List<ValidationResult> result = rule.validate(blueprint);
+        List<EvaluationResult.ValidationResult> result = rule.validate(blueprint);
 
         assertThat(result).isEmpty();
     }
@@ -46,7 +40,7 @@ class MissingDeploymentTypeRuleTest {
                 .build();
 
         MissingDeploymentTypeRule rule = new MissingDeploymentTypeRule();
-        List<ValidationResult> result = rule.validate(blueprint);
+        List<EvaluationResult.ValidationResult> result = rule.validate(blueprint);
 
         assertThat(result).isNotEmpty();
         assertThat(result.get(0).message()).contains("ServiceB");

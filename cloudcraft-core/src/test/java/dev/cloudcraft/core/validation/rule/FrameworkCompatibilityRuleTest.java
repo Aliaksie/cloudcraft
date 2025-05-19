@@ -21,7 +21,7 @@ class FrameworkCompatibilityRuleTest {
                 Environment.DEV
         );
 
-        List<ValidationResult> issues = rule.validate(component);
+        List<EvaluationResult.ValidationResult> issues = rule.validate(component);
         assertTrue(issues.isEmpty());
     }
 
@@ -36,7 +36,7 @@ class FrameworkCompatibilityRuleTest {
                 Environment.TEST
         );
 
-        List<ValidationResult> issues = rule.validate(component);
+        List<EvaluationResult.ValidationResult> issues = rule.validate(component);
         assertFalse(issues.isEmpty());
         assertEquals(1, issues.size());
         assertTrue(issues.get(0).message().contains("not compatible"));

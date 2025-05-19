@@ -24,7 +24,7 @@ class DefaultArchitectureValidatorTest {
 
 
         DefaultArchitectureValidator validator = ArchitectureValidator.defaultValidator();
-        List<ValidationResult> issues = validator.validate(blueprint);
+        List<EvaluationResult.ValidationResult> issues = validator.validate(blueprint);
 
         assertTrue(issues.isEmpty());
     }
@@ -42,7 +42,7 @@ class DefaultArchitectureValidatorTest {
         ArchitectureBlueprint blueprint = ArchitectureBlueprint.builder().addComponent(invalidComponent).build();
 
         DefaultArchitectureValidator validator = ArchitectureValidator.defaultValidator();
-        List<ValidationResult> issues = validator.validate(blueprint);
+        List<EvaluationResult.ValidationResult> issues = validator.validate(blueprint);
 
         assertFalse(issues.isEmpty());
         assertTrue(issues.get(0).message().contains("not compatible"));

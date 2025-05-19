@@ -3,13 +3,15 @@ package dev.cloudcraft.core.advisor.rule;
 import dev.cloudcraft.core.dsl.ArchitectureBlueprint;
 import dev.cloudcraft.core.model.CloudProvider;
 import dev.cloudcraft.core.model.Component;
+import dev.cloudcraft.core.model.EvaluationResult;
 import dev.cloudcraft.core.model.MessageBroker;
-import dev.cloudcraft.core.model.ValidationResult;
+import dev.cloudcraft.core.model.RuleDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class UnsupportedMessageBrokerRule implements CloudCompatibilityRule {
     private static final Map<CloudProvider, Set<MessageBroker>> SUPPORTED_BROKERS = Map.of(
@@ -20,8 +22,8 @@ public class UnsupportedMessageBrokerRule implements CloudCompatibilityRule {
 
 
     @Override
-    public List<ValidationResult> analyze(final ArchitectureBlueprint blueprint) {
-        List<ValidationResult> results = new ArrayList<>();
+    public List<EvaluationResult.ValidationResult> analyze(final ArchitectureBlueprint blueprint) {
+        List<EvaluationResult.ValidationResult> results = new ArrayList<>();
         for (final Component component : blueprint.components()) {
             final CloudProvider provider = component.cloudProvider();
             final MessageBroker broker = component.technologyStack().messageBroker();
@@ -33,11 +35,12 @@ public class UnsupportedMessageBrokerRule implements CloudCompatibilityRule {
             Set<MessageBroker> supported = SUPPORTED_BROKERS.getOrDefault(provider, Set.of());
 
             if (!supported.contains(broker)) {
-                return List.of(new ValidationResult(
+                return List.of(new EvaluationResult.ValidationResult(
+                        UUID.randomUUID().toString(),
                         name(),
                         component.name(),
                         "Message broker " + broker + " is not commonly supported on " + provider,
-                        ValidationResult.Severity.WARNING
+                        RuleDefinition.Severity.MEDIUM
                 ));
             }
         }

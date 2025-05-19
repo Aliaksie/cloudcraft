@@ -1,12 +1,12 @@
 package dev.cloudcraft.core.advisor.rule;
 
 import dev.cloudcraft.core.dsl.ArchitectureBlueprint;
-import dev.cloudcraft.core.model.ValidationResult;
+import dev.cloudcraft.core.model.EvaluationResult;
 
 import java.util.List;
 
 public interface CloudCompatibilityRule {
-    List<ValidationResult> analyze(ArchitectureBlueprint blueprint);
+    List<EvaluationResult.ValidationResult> analyze(ArchitectureBlueprint blueprint);
 
     default String name() {
         return this.getClass().getSimpleName();

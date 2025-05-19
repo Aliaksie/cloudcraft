@@ -1,0 +1,6 @@
+- id: adv-001
+  name: Consider Multi-region Deployment
+  level: COMPONENT
+  description: Improve availability by deploying across multiple regions.
+  condition: architecture.regionCount < 2
+  advice: Consider adding redundancy via multi-region deployment.

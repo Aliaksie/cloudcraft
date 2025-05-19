@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.UUID;
 
-import static dev.cloudcraft.core.model.ValidationResult.Severity.WARNING;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UnsupportedMessageBrokerRuleTest {
@@ -30,37 +29,37 @@ class UnsupportedMessageBrokerRuleTest {
     @Test
     void testValidBrokerForAWS() {
         ArchitectureBlueprint component = createBlueprint("ServiceA", CloudProvider.AWS, MessageBroker.KAFKA);
-        List<ValidationResult> result = rule.analyze(component);
+        List<EvaluationResult.ValidationResult> result = rule.analyze(component);
         assertThat(result).isEmpty();
     }
 
     @Test
     void testInvalidBrokerForAzure() {
         ArchitectureBlueprint component = createBlueprint("ServiceB", CloudProvider.AZURE, MessageBroker.KAFKA);
-        List<ValidationResult> result = rule.analyze(component);
+        List<EvaluationResult.ValidationResult> result = rule.analyze(component);
         assertThat(result).isNotEmpty();
-        assertThat(result.get(0).severity()).isEqualTo(WARNING);
+        assertThat(result.get(0).severity()).isEqualTo(RuleDefinition.Severity.MEDIUM);
         assertThat(result.get(0).message()).contains("not commonly supported");
     }
 
     @Test
     void testValidBrokerForGCP() {
         ArchitectureBlueprint component = createBlueprint("ServiceC", CloudProvider.GCP, MessageBroker.PUBSUB);
-        List<ValidationResult> result = rule.analyze(component);
+        List<EvaluationResult.ValidationResult> result = rule.analyze(component);
         assertThat(result).isEmpty();
     }
 
     @Test
     void testNoValidationIfCloudProviderIsNone() {
         ArchitectureBlueprint component = createBlueprint("ServiceD", CloudProvider.NONE, MessageBroker.KAFKA);
-        List<ValidationResult> result = rule.analyze(component);
+        List<EvaluationResult.ValidationResult> result = rule.analyze(component);
         assertThat(result).isEmpty();
     }
 
     @Test
     void testNoValidationIfBrokerIsNone() {
         ArchitectureBlueprint component = createBlueprint("ServiceE", CloudProvider.AWS, MessageBroker.NONE);
-        List<ValidationResult> result = rule.analyze(component);
+        List<EvaluationResult.ValidationResult> result = rule.analyze(component);
         assertThat(result).isEmpty();
     }
 }

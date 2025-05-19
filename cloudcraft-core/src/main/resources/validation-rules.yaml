@@ -1,0 +1,13 @@
+- id: rule-001
+  name: Require Cloud Provider
+  level: COMPONENT
+  description: Each component must define a cloud provider.
+  expression: component.cloudProvider != null
+  severity: HIGH
+
+- id: rule-002
+  name: Require Deployment Type
+  level: COMPONENT
+  description: Each component must define a deployment type.
+  expression: component.deploymentType != null
+  severity: MEDIUM

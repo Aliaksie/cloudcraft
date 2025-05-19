@@ -1,9 +1,15 @@
 package dev.cloudcraft.core.validation.rule;
 
-import dev.cloudcraft.core.model.*;
+import dev.cloudcraft.core.model.CloudProvider;
+import dev.cloudcraft.core.model.Component;
+import dev.cloudcraft.core.model.Database;
+import dev.cloudcraft.core.model.EvaluationResult;
+import dev.cloudcraft.core.model.RuleDefinition;
+import dev.cloudcraft.core.model.TechnologyStack;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class CloudDatabaseCompatibilityRule implements ComponentValidationRule {
     // todo: or hasMap
@@ -14,15 +20,18 @@ public class CloudDatabaseCompatibilityRule implements ComponentValidationRule {
 //    );
 
     @Override
-    public List<ValidationResult> validate(final Component component) {
+    public List<EvaluationResult.ValidationResult> validate(final Component component) {
         final CloudProvider cloud = component.cloudProvider();
         final TechnologyStack stack = component.technologyStack();
 
         if (!isDatabaseCompatible(cloud, stack.database())) {
-            return List.of(new ValidationResult(name(),
+            return List.of(new EvaluationResult.ValidationResult(
+                    UUID.randomUUID().toString(),
+                    name(),
                     component.name(),
                     "Database " + stack.database() + " is not supported on cloud provider " + cloud,
-                    ValidationResult.Severity.WARNING
+                    RuleDefinition.Severity.MEDIUM
+
             ));
         }
 

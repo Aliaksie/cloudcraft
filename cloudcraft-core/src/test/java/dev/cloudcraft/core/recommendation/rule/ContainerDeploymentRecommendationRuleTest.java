@@ -24,13 +24,13 @@ class ContainerDeploymentRecommendationRuleTest {
                 .build();
 
         RecommendationRule recommendationRule = new ContainerDeploymentRecommendationRule();
-        List<Recommendation> recommendations = recommendationRule.evaluate(blueprint);
+        List<EvaluationResult.Recommendation> recommendations = recommendationRule.evaluate(blueprint);
 
         assertThat(recommendations).hasSize(1);
-        Recommendation rec = recommendations.get(0);
+        EvaluationResult.Recommendation rec = recommendations.get(0);
         assertThat(rec.componentName()).isEqualTo("LegacyService");
-        assertThat(rec.suggestion()).contains("Consider moving from VM to container-based deployment");
-        assertThat(rec.type()).isEqualTo(Recommendation.RecommendationType.MODERNIZATION);
+        assertThat(rec.message()).contains("Consider moving from VM to container-based deployment");
+        assertThat(rec.type()).isEqualTo(EvaluationResult.Recommendation.RecommendationType.MODERNIZATION);
     }
 
 }
