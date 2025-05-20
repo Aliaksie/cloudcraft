@@ -7,6 +7,8 @@ import dev.cloudcraft.core.model.Component;
 import dev.cloudcraft.core.model.Dependency;
 import dev.cloudcraft.core.model.DependencyType;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,10 @@ public record ArchitectureBlueprint(String name, List<Component> components, Lis
 
     public String toYaml() throws JsonProcessingException {
         return MAPPER_YAML.writeValueAsString(this);
+    }
+
+    public static ArchitectureBlueprint fromYaml(final InputStream yaml) throws IOException {
+        return MAPPER_YAML.readValue(yaml, ArchitectureBlueprint.class);
     }
 
 

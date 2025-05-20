@@ -9,4 +9,8 @@ public interface DiagramGenerator {
 
     String generate(ArchitectureBlueprint blueprint);
 
+    static DiagramGenerator defaultGenerator() {
+        return new CompositeDiagramGenerator(new ComponentDiagramGenerator(), new DeploymentDiagramGenerator());
+    }
+
 }
