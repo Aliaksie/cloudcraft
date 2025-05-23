@@ -1,0 +1,13 @@
+name: BluePrint
+components:
+  - id: "1"
+    name: "ValidService"
+    technologyStack:
+      language: "JAVA"
+      framework: "SPRING_BOOT"
+      database: "POSTGRESQL"
+      messageBroker: "KAFKA"
+    deploymentType: "CONTAINER"
+    cloudProvider: "AWS"
+    environment: "PROD"
+dependencies: [ ]

@@ -11,28 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CloudCraftCliTest {
     @Test
-    void testAnalyzeCommand_runsSuccessfully() throws IOException {
-        // Given
-        Path tempBlueprint = Files.createTempFile("blueprint", ".yaml");
-        Files.writeString(tempBlueprint, """
-                   name: BluePrint
-                    components:
-                    - id: "1"
-                      name: "ValidService"
-                      technologyStack:
-                        language: "JAVA"
-                        framework: "SPRING_BOOT"
-                        database: "POSTGRESQL"
-                        messageBroker: "KAFKA"
-                      deploymentType: "CONTAINER"
-                      cloudProvider: "AWS"
-                      environment: "PROD"
-                    dependencies: []
-        """);
-
+    void testAnalyzeCommand_runsSuccessfully() {
         String[] args = {
                 "analyze",
-                "--file", tempBlueprint.toString(),
+                "--file", "src/test/resources/blueprint.yaml",
                 "--format", "text"
         };
 
@@ -45,30 +27,12 @@ class CloudCraftCliTest {
 
     @Test
     void testAnalyzeCommand_withDiagramGeneration() throws IOException {
-        // Given
-        Path tempBlueprint = Files.createTempFile("blueprint", ".yaml");
-        Files.writeString(tempBlueprint, """
-                    name: BluePrint
-                    components:
-                    - id: "1"
-                      name: "ValidService"
-                      technologyStack:
-                        language: "JAVA"
-                        framework: "SPRING_BOOT"
-                        database: "POSTGRESQL"
-                        messageBroker: "KAFKA"
-                      deploymentType: "CONTAINER"
-                      cloudProvider: "AWS"
-                      environment: "PROD"
-                    dependencies: []
-        """);
-
-        Path outputDiagram = Path.of("architecture.puml");
+        Path outputDiagram = Path.of("architecture.svg");
         Files.deleteIfExists(outputDiagram);
 
         String[] args = {
                 "analyze",
-                "--file", tempBlueprint.toString(),
+                "--file", "src/test/resources/blueprint.yaml",
                 "--diagram"
         };
 
